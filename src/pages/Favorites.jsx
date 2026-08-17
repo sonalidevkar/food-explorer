@@ -1,156 +1,129 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import "./Favorites.css";
 
 function Favorites() {
-  const [favorites, setFavorites] = useState([]);
 
-  const loadFavorites = () => {
-    try {
-      const saved =
-        JSON.parse(localStorage.getItem("favorites")) || [];
-
-      setFavorites(saved);
-    } catch {
-      setFavorites([]);
-    }
-  };
-
-  useEffect(() => {
-    loadFavorites();
-  }, []);
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem("favoriteFoods");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const removeFavorite = (id) => {
-    const updated = favorites.filter(
-      (food) => food.idMeal !== id
+
+    const updatedFavorites = favorites.filter(
+      (food) => food.id !== id
     );
 
-    setFavorites(updated);
+    setFavorites(updatedFavorites);
+
     localStorage.setItem(
-      "favorites",
-      JSON.stringify(updated)
+      "favoriteFoods",
+      JSON.stringify(updatedFavorites)
     );
-  };
-
-  const clearFavorites = () => {
-    setFavorites([]);
-    localStorage.removeItem("favorites");
   };
 
   return (
     <main className="favorites-page">
+
       <section className="favorites-header">
-        <span className="hero-badge">
-          ❤️ Your Collection
-        </span>
+
+        <span>❤️ YOUR COLLECTION</span>
 
         <h1>
-          My <span>Favorite Recipes</span>
+          Favorite <strong>Foods</strong>
         </h1>
 
         <p>
-          Keep all your favorite recipes in one beautiful
-          place.
+          Your favorite recipes are saved here.
         </p>
+
       </section>
 
+
       {favorites.length === 0 ? (
+
         <section className="empty-favorites">
-          <div className="empty-heart">🤍</div>
 
-          <h2>No Favorites Yet</h2>
-
-          <p>
-            You haven't saved any recipes yet.
-            Explore delicious foods and save your favorites!
-          </p>
-
-          <Link
-            to="/foods"
-            className="explore-favorites-btn"
-          >
-            🍔 Explore Foods
-          </Link>
-        </section>
-      ) : (
-        <>
-          <div className="favorites-toolbar">
-            <div>
-              <strong>{favorites.length}</strong>{" "}
-              {favorites.length === 1
-                ? "favorite recipe"
-                : "favorite recipes"}
-            </div>
-
-            <button
-              className="clear-favorites-btn"
-              onClick={clearFavorites}
-            >
-              🗑️ Clear All
-            </button>
+          <div className="empty-heart">
+            💔
           </div>
 
-          <section className="food-grid">
-            {favorites.map((food) => (
-              <article
-                className="food-card"
-                key={food.idMeal}
-              >
-                <div className="food-image-wrapper">
-                  <img
-                    src={food.strMealThumb}
-                    alt={food.strMeal}
-                    loading="lazy"
-                    width="300"
-                    height="220"
-                  />
+          <h2>No Favorite Foods Yet</h2>
+
+          <p>
+            Go to Food Explorer and click ❤️
+            on any food you love.
+          </p>
+
+        </section>
+
+      ) : (
+
+        <section className="favorite-grid">
+
+          {favorites.map((food) => (
+
+            <article
+              className="favorite-card"
+              key={food.id}
+            >
+
+              <div className="favorite-food-image">
+
+                <span>
+                  {food.emoji}
+                </span>
+
+                <small>
+                  {food.category}
+                </small>
+
+              </div>
+
+
+              <div className="favorite-card-content">
+
+                <h2>{food.name}</h2>
+
+                <p>
+                  {food.description}
+                </p>
+
+                <div className="favorite-meta">
+                  ⏱️ {food.time}
+                </div>
+
+
+                <div className="favorite-actions">
+
+                  <a
+                    href={food.video}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    ▶️ Recipe Video
+                  </a>
 
                   <button
-                    className="favorite-icon"
                     onClick={() =>
-                      removeFavorite(food.idMeal)
+                      removeFavorite(food.id)
                     }
-                    aria-label={`Remove ${food.strMeal} from favorites`}
                   >
-                    ❤️
+                    🗑️ Remove
                   </button>
+
                 </div>
 
-                <div className="food-content">
-                  <span className="food-category">
-                    {food.strCategory || "Recipe"}
-                  </span>
+              </div>
 
-                  <h2>{food.strMeal}</h2>
+            </article>
 
-                  <p className="food-area">
-                    🌎{" "}
-                    {food.strArea ||
-                      "International Cuisine"}
-                  </p>
+          ))}
 
-                  <div className="food-actions">
-                    <Link
-                      to={`/food/${food.idMeal}`}
-                      className="details-btn"
-                    >
-                      View Recipe →
-                    </Link>
+        </section>
 
-                    <button
-                      className="favorite-btn"
-                      onClick={() =>
-                        removeFavorite(food.idMeal)
-                      }
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </section>
-        </>
       )}
+
     </main>
   );
 }

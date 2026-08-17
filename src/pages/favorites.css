@@ -1,0 +1,185 @@
+.favorites-page {
+  min-height: calc(100vh - 75px);
+  background: #fffaf7;
+  padding: 60px 0 80px;
+}
+
+.favorites-header {
+  width: min(1100px, 92%);
+  margin: auto;
+  text-align: center;
+}
+
+.favorites-header > span {
+  color: #ff4c61;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.favorites-header h1 {
+  margin: 12px 0;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: #222;
+}
+
+.favorites-header h1 strong {
+  color: #ff4c61;
+}
+
+.favorites-header p {
+  color: #777;
+}
+
+.empty-favorites {
+  width: min(600px, 90%);
+  margin: 70px auto;
+  padding: 55px 30px;
+  text-align: center;
+  background: white;
+  border-radius: 25px;
+  border: 1px solid #eee1e1;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+}
+
+.empty-heart {
+  font-size: 70px;
+}
+
+.empty-favorites h2 {
+  color: #333;
+}
+
+.empty-favorites p {
+  color: #888;
+  line-height: 1.6;
+}
+
+.favorite-grid {
+  width: min(1100px, 92%);
+  margin: 45px auto 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.favorite-card {
+  overflow: hidden;
+  background: white;
+  border-radius: 22px;
+  border: 1px solid #eee1e1;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.06);
+  transition: 0.3s ease;
+}
+
+.favorite-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+}
+
+.favorite-food-image {
+  height: 200px;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+    135deg,
+    #fff0f1,
+    #ffe0e4
+  );
+}
+
+.favorite-food-image span {
+  font-size: 105px;
+}
+
+.favorite-food-image small {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+  padding: 6px 11px;
+  border-radius: 20px;
+
+  background: white;
+  color: #ff4c61;
+
+  font-weight: 800;
+}
+
+.favorite-card-content {
+  padding: 22px;
+}
+
+.favorite-card-content h2 {
+  margin: 0 0 10px;
+  color: #222;
+}
+
+.favorite-card-content p {
+  min-height: 45px;
+  color: #777;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.favorite-meta {
+  margin: 15px 0;
+  color: #888;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.favorite-actions {
+  display: flex;
+  gap: 9px;
+}
+
+.favorite-actions a,
+.favorite-actions button {
+  flex: 1;
+  padding: 11px 8px;
+  border-radius: 10px;
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.favorite-actions a {
+  background: #222;
+  color: white;
+}
+
+.favorite-actions button {
+  border: 1px solid #ffd1d5;
+  background: #fff4f5;
+  color: #ff4053;
+}
+
+.favorite-actions a:hover {
+  background: #ff641f;
+}
+
+.favorite-actions button:hover {
+  background: #ffe1e4;
+}
+
+@media (max-width: 900px) {
+  .favorite-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .favorite-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,20 +2,22 @@ import { NavLink } from "react-router-dom";
 
 function Navbar() {
   return (
-    <header className="navbar">
-      <nav className="navbar-container" aria-label="Main navigation">
+    <nav className="navbar">
+      <div className="nav-container">
+
         <NavLink to="/" className="logo">
-          🍔 <span>Food</span> Explorer
+          🍴 Food<span>Explorer</span>
         </NavLink>
 
         <div className="nav-links">
+
           <NavLink
             to="/"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
           >
-            Home
+            🏠 Home
           </NavLink>
 
           <NavLink
@@ -24,7 +26,7 @@ function Navbar() {
               isActive ? "nav-link active" : "nav-link"
             }
           >
-            Explore Foods
+            🍕 Food Explorer
           </NavLink>
 
           <NavLink
@@ -33,7 +35,7 @@ function Navbar() {
               isActive ? "nav-link active" : "nav-link"
             }
           >
-            ❤️ Favorites
+            ❤️ Favorite Foods
           </NavLink>
 
           <NavLink
@@ -42,11 +44,13 @@ function Navbar() {
               isActive ? "nav-link active" : "nav-link"
             }
           >
-            Feedback
+            💬 Feedback
           </NavLink>
+
         </div>
-      </nav>
-    </header>
+
+      </div>
+    </nav>
   );
 }
 

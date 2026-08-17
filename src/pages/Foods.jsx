@@ -1,324 +1,292 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import "./Foods.css";
+
+const foods = [
+  {
+    id: 1,
+    name: "Margherita Pizza",
+    category: "Italian",
+    emoji: "🍕",
+    description: "Classic pizza with tomato, mozzarella and fresh basil.",
+    time: "30 min",
+    video: "https://www.youtube.com/results?search_query=margherita+pizza+recipe"
+  },
+  {
+    id: 2,
+    name: "Chicken Burger",
+    category: "American",
+    emoji: "🍔",
+    description: "Juicy chicken burger with fresh vegetables and sauce.",
+    time: "25 min",
+    video: "https://www.youtube.com/results?search_query=chicken+burger+recipe"
+  },
+  {
+    id: 3,
+    name: "Creamy Pasta",
+    category: "Italian",
+    emoji: "🍝",
+    description: "Creamy and delicious pasta prepared with herbs and cheese.",
+    time: "20 min",
+    video: "https://www.youtube.com/results?search_query=creamy+pasta+recipe"
+  },
+  {
+    id: 4,
+    name: "Chicken Biryani",
+    category: "Indian",
+    emoji: "🍛",
+    description: "Aromatic basmati rice cooked with spicy chicken and herbs.",
+    time: "45 min",
+    video: "https://www.youtube.com/results?search_query=chicken+biryani+recipe"
+  },
+  {
+    id: 5,
+    name: "Sushi",
+    category: "Japanese",
+    emoji: "🍣",
+    description: "Fresh and colorful Japanese sushi rolls.",
+    time: "35 min",
+    video: "https://www.youtube.com/results?search_query=sushi+recipe"
+  },
+  {
+    id: 6,
+    name: "Paneer Tikka",
+    category: "Indian",
+    emoji: "🧀",
+    description: "Grilled paneer marinated with yogurt and Indian spices.",
+    time: "30 min",
+    video: "https://www.youtube.com/results?search_query=paneer+tikka+recipe"
+  },
+  {
+    id: 7,
+    name: "Masala Dosa",
+    category: "Indian",
+    emoji: "🥞",
+    description: "Crispy South Indian dosa filled with spicy potato masala.",
+    time: "35 min",
+    video: "https://www.youtube.com/results?search_query=masala+dosa+recipe"
+  },
+  {
+    id: 8,
+    name: "Tacos",
+    category: "Mexican",
+    emoji: "🌮",
+    description: "Crunchy tacos filled with vegetables, cheese and spicy sauce.",
+    time: "25 min",
+    video: "https://www.youtube.com/results?search_query=tacos+recipe"
+  }
+];
 
 function Foods() {
-  const [foods, setFoods] = useState([]);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [category, setCategory] = useState("All");
 
   const [favorites, setFavorites] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("favorites")) || [];
-    } catch {
-      return [];
-    }
+    const saved = localStorage.getItem("favoriteFoods");
+    return saved ? JSON.parse(saved) : [];
   });
 
-  // Keeps track of the current API request
-  const controllerRef = useRef(null);
+  const categories = [
+    "All",
+    "Indian",
+    "Italian",
+    "American",
+    "Japanese",
+    "Mexican"
+  ];
 
-  const fetchFoods = async (query = "") => {
-    // Cancel previous request
-    if (controllerRef.current) {
-      controllerRef.current.abort();
-    }
-
-    const controller = new AbortController();
-    controllerRef.current = controller;
-
-    try {
-      setLoading(true);
-      setError("");
-
-      const response = await fetch(
-        `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(
-          query
-        )}`,
-        {
-          signal: controller.signal,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch foods");
-      }
-
-      const data = await response.json();
-
-      setFoods(data.meals || []);
-    } catch (err) {
-      if (err.name === "AbortError") {
-        return;
-      }
-
-      setError("Unable to load foods. Please try again.");
-      setFoods([]);
-    } finally {
-      if (!controller.signal.aborted) {
-        setLoading(false);
-      }
-    }
-  };
-
-  // Load foods when page opens
-  useEffect(() => {
-    fetchFoods("");
-
-    return () => {
-      if (controllerRef.current) {
-        controllerRef.current.abort();
-      }
-    };
-  }, []);
-
-  // Search
-  const handleSearch = (event) => {
-    event.preventDefault();
-
-    fetchFoods(search.trim());
-  };
-
-  // Clear search
-  const handleClearSearch = () => {
-    setSearch("");
-    fetchFoods("");
-  };
-
-  // Favorite toggle
   const toggleFavorite = (food) => {
+    let updatedFavorites;
+
     const alreadyFavorite = favorites.some(
-      (item) => item.idMeal === food.idMeal
+      (item) => item.id === food.id
     );
 
-    const updatedFavorites = alreadyFavorite
-      ? favorites.filter((item) => item.idMeal !== food.idMeal)
-      : [...favorites, food];
+    if (alreadyFavorite) {
+      updatedFavorites = favorites.filter(
+        (item) => item.id !== food.id
+      );
+    } else {
+      updatedFavorites = [...favorites, food];
+    }
 
     setFavorites(updatedFavorites);
 
     localStorage.setItem(
-      "favorites",
+      "favoriteFoods",
       JSON.stringify(updatedFavorites)
     );
   };
 
+  const filteredFoods = foods.filter((food) => {
+    const matchesSearch =
+      food.name.toLowerCase().includes(search.toLowerCase());
+
+    const matchesCategory =
+      category === "All" || food.category === category;
+
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <main className="foods-page">
-      {/* Page Header */}
+
       <section className="foods-header">
-        <div>
-          <span className="hero-badge">
-            🍴 Explore • Discover • Enjoy
-          </span>
+
+        <div className="foods-title">
+
+          <span>🍽️ DISCOVER</span>
 
           <h1>
-            Explore Delicious <span>Foods 🍕</span>
+            Explore Delicious
+            <strong> Recipes</strong>
           </h1>
 
           <p>
-            Discover amazing recipes from different cuisines
-            around the world.
+            Find delicious recipes from different cuisines
+            and discover your next favorite food.
           </p>
+
         </div>
+
+        <div className="food-search">
+
+          <span>🔎</span>
+
+          <input
+            type="text"
+            placeholder="Search your favorite food..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+        </div>
+
       </section>
 
-      {/* Search Section */}
-      <section className="search-section">
-        <form
-          className="food-search-form"
-          onSubmit={handleSearch}
-        >
-          <label htmlFor="food-search">
-            Search for a food
-          </label>
 
-          <div className="search-box">
-            <span className="search-icon">🔍</span>
+      <div className="food-categories">
 
-            <input
-              id="food-search"
-              type="search"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search Chicken, Pasta, Pizza..."
-              autoComplete="off"
-            />
+        {categories.map((item) => (
 
-            {search && (
-              <button
-                type="button"
-                className="clear-search"
-                onClick={handleClearSearch}
-                aria-label="Clear search"
+          <button
+            key={item}
+            className={
+              category === item
+                ? "category-btn selected"
+                : "category-btn"
+            }
+            onClick={() => setCategory(item)}
+          >
+            {item}
+          </button>
+
+        ))}
+
+      </div>
+
+
+      <section className="foods-grid">
+
+        {filteredFoods.length > 0 ? (
+
+          filteredFoods.map((food) => {
+
+            const isFavorite = favorites.some(
+              (item) => item.id === food.id
+            );
+
+            return (
+              <article
+                className="food-card"
+                key={food.id}
               >
-                ✕
-              </button>
-            )}
 
-            <button
-              type="submit"
-              className="search-button"
-              disabled={loading}
-            >
-              Search
-            </button>
-          </div>
-        </form>
-      </section>
+                <div className="food-image">
 
-      {/* Loading */}
-      {loading && (
-        <section
-          className="status-section"
-          aria-live="polite"
-        >
-          <div className="loader"></div>
+                  <span className="big-food">
+                    {food.emoji}
+                  </span>
 
-          <h2>Finding delicious foods...</h2>
+                  <span className="food-category">
+                    {food.category}
+                  </span>
 
-          <p>Please wait a moment 🍔</p>
-        </section>
-      )}
+                </div>
 
-      {/* Error */}
-      {!loading && error && (
-        <section
-          className="status-section error-section"
-          role="alert"
-        >
-          <div className="status-icon">😔</div>
 
-          <h2>Oops! Something went wrong.</h2>
+                <div className="food-card-content">
 
-          <p>{error}</p>
+                  <h2>{food.name}</h2>
 
-          <button
-            className="retry-button"
-            onClick={() => fetchFoods(search)}
-          >
-            🔄 Try Again
-          </button>
-        </section>
-      )}
+                  <p>{food.description}</p>
 
-      {/* Empty */}
-      {!loading && !error && foods.length === 0 && (
-        <section className="status-section">
-          <div className="status-icon">🍽️</div>
 
-          <h2>No foods found</h2>
+                  <div className="food-meta">
 
-          <p>
-            We couldn't find that recipe. Try another food
-            name.
-          </p>
-
-          <button
-            className="retry-button"
-            onClick={handleClearSearch}
-          >
-            View All Foods
-          </button>
-        </section>
-      )}
-
-      {/* Results */}
-      {!loading && !error && foods.length > 0 && (
-        <section className="food-results">
-          <div className="results-heading">
-            <div>
-              <h2>
-                {search
-                  ? `Results for "${search}"`
-                  : "Popular Recipes"}
-              </h2>
-
-              <p>
-                {foods.length} recipe
-                {foods.length !== 1 ? "s" : ""} found
-              </p>
-            </div>
-
-            <div className="results-count">
-              🍴 {foods.length}
-            </div>
-          </div>
-
-          <div className="food-grid">
-            {foods.map((food) => {
-              const isFavorite = favorites.some(
-                (item) => item.idMeal === food.idMeal
-              );
-
-              return (
-                <article
-                  className="food-card"
-                  key={food.idMeal}
-                >
-                  {/* Food Image */}
-                  <div className="food-image-wrapper">
-                    <img
-                      src={food.strMealThumb}
-                      alt={food.strMeal}
-                      loading="lazy"
-                      width="300"
-                      height="220"
-                    />
-
-                    <button
-                      className="favorite-icon"
-                      type="button"
-                      onClick={() => toggleFavorite(food)}
-                      aria-label={
-                        isFavorite
-                          ? `Remove ${food.strMeal} from favorites`
-                          : `Add ${food.strMeal} to favorites`
-                      }
-                    >
-                      {isFavorite ? "❤️" : "🤍"}
-                    </button>
-                  </div>
-
-                  {/* Food Information */}
-                  <div className="food-content">
-                    <span className="food-category">
-                      {food.strCategory || "Recipe"}
+                    <span>
+                      ⏱️ {food.time}
                     </span>
 
-                    <h2>{food.strMeal}</h2>
+                    <span>
+                      ⭐ 4.8
+                    </span>
 
-                    <p className="food-area">
-                      🌎{" "}
-                      {food.strArea ||
-                        "International Cuisine"}
-                    </p>
-
-                    <div className="food-actions">
-                      <Link
-                        to={`/food/${food.idMeal}`}
-                        className="details-btn"
-                      >
-                        View Recipe →
-                      </Link>
-
-                      <button
-                        className="favorite-btn"
-                        type="button"
-                        onClick={() => toggleFavorite(food)}
-                      >
-                        {isFavorite
-                          ? "Saved ❤️"
-                          : "Save 🤍"}
-                      </button>
-                    </div>
                   </div>
-                </article>
-              );
-            })}
+
+
+                  <div className="food-actions">
+
+                    <button
+                      className={
+                        isFavorite
+                          ? "favorite-btn favorite-active"
+                          : "favorite-btn"
+                      }
+                      onClick={() => toggleFavorite(food)}
+                      title={
+                        isFavorite
+                          ? "Remove from favorites"
+                          : "Add to favorites"
+                      }
+                    >
+                      {isFavorite ? "❤️" : "♡"}
+                    </button>
+
+                    <a
+                      href={food.video}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="video-btn"
+                    >
+                      ▶️ Watch Recipe
+                    </a>
+
+                  </div>
+
+                </div>
+
+              </article>
+            );
+          })
+
+        ) : (
+
+          <div className="no-food">
+
+            <div>😔</div>
+
+            <h2>No food found</h2>
+
+            <p>
+              Try searching for another recipe.
+            </p>
+
           </div>
-        </section>
-      )}
+
+        )}
+
+      </section>
+
     </main>
   );
 }

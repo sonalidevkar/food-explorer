@@ -1,272 +1,264 @@
 import { useState } from "react";
+import "./Feedback.css";
 
 function Feedback() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    rating: 0,
-    message: "",
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(0);
+  const [message, setMessage] = useState("");
+
+  const [feedbacks, setFeedbacks] = useState(() => {
+    const saved = localStorage.getItem("foodFeedbacks");
+    return saved ? JSON.parse(saved) : [];
   });
-
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.rating ||
-      !formData.message
-    ) {
+    if (!name.trim() || rating === 0 || !message.trim()) {
       alert("Please complete all fields.");
       return;
     }
 
-    const oldFeedback =
-      JSON.parse(localStorage.getItem("feedback")) || [];
-
     const newFeedback = {
-      ...formData,
       id: Date.now(),
+      name: name.trim(),
+      rating,
+      message: message.trim()
     };
 
+    const updatedFeedbacks = [
+      newFeedback,
+      ...feedbacks
+    ];
+
+    setFeedbacks(updatedFeedbacks);
+
     localStorage.setItem(
-      "feedback",
-      JSON.stringify([...oldFeedback, newFeedback])
+      "foodFeedbacks",
+      JSON.stringify(updatedFeedbacks)
     );
 
-    setSubmitted(true);
-
-    setFormData({
-      name: "",
-      email: "",
-      rating: 0,
-      message: "",
-    });
+    setName("");
+    setRating(0);
+    setMessage("");
   };
 
   return (
     <main className="feedback-page">
+
+      {/* HEADER */}
+
+      <section className="feedback-header">
+
+        <span>💬 SHARE YOUR EXPERIENCE</span>
+
+        <h1>
+          We Value Your
+          <strong> Feedback</strong>
+        </h1>
+
+        <p>
+          Tell us what you think about Food Explorer.
+          Your feedback helps us make the experience better.
+        </p>
+
+      </section>
+
+
+      {/* FORM */}
+
       <section className="feedback-container">
-        {/* Left Side */}
-        <div className="feedback-intro">
-          <span className="hero-badge">
-            💬 We Value Your Opinion
-          </span>
 
-          <h1>
-            Tell us what you
-            <span> think!</span>
-          </h1>
+        <div className="feedback-form-card">
 
-          <p>
-            Your feedback helps us make Food Explorer
-            better, easier and more delicious for everyone.
+          <div className="feedback-icon">
+            💬
+          </div>
+
+          <h2>Give Your Feedback</h2>
+
+          <p className="form-subtitle">
+            We'd love to hear from you!
           </p>
 
-          <div className="feedback-highlights">
-            <div className="feedback-highlight">
-              <span>🍴</span>
-              <div>
-                <strong>Better Experience</strong>
-                <p>Help us improve your food journey.</p>
-              </div>
-            </div>
+          <form onSubmit={handleSubmit}>
 
-            <div className="feedback-highlight">
-              <span>⭐</span>
-              <div>
-                <strong>Your Opinion Matters</strong>
-                <p>Every suggestion makes a difference.</p>
-              </div>
-            </div>
+            {/* NAME */}
 
-            <div className="feedback-highlight">
-              <span>❤️</span>
-              <div>
-                <strong>Made With Love</strong>
-                <p>Built for food lovers like you.</p>
-              </div>
-            </div>
-          </div>
+            <label>Your Name</label>
 
-          <div className="feedback-food">
-            <span>🍕</span>
-            <span>🍔</span>
-            <span>🍜</span>
-            <span>🥗</span>
-            <span>🍰</span>
-          </div>
-        </div>
+            <input
+              type="text"
+              placeholder="Enter your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
 
-        {/* Right Side */}
-        <div className="feedback-card">
-          {submitted ? (
-            <div className="feedback-success">
-              <div className="success-icon">🎉</div>
 
-              <h2>Thank You!</h2>
+            {/* RATING */}
 
-              <p>
-                Your feedback has been submitted
-                successfully.
-              </p>
+            <label>How was your experience?</label>
 
-              <button
-                className="feedback-submit"
-                onClick={() => setSubmitted(false)}
-              >
-                ✨ Give More Feedback
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="feedback-card-header">
-                <h2>Share Your Feedback</h2>
-                <p>
-                  It only takes a minute. We promise! 😊
-                </p>
-              </div>
+            <div className="rating-input">
 
-              <form
-                className="feedback-form"
-                onSubmit={handleSubmit}
-              >
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="name">
-                      Your Name
-                    </label>
-
-                    <div className="input-wrapper">
-                      <span>👤</span>
-
-                      <input
-                        id="name"
-                        type="text"
-                        name="name"
-                        placeholder="Enter your name"
-                        value={formData.name}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="email">
-                      Email Address
-                    </label>
-
-                    <div className="input-wrapper">
-                      <span>✉️</span>
-
-                      <input
-                        id="email"
-                        type="email"
-                        name="email"
-                        placeholder="you@example.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Rating */}
-                <div className="form-group">
-                  <label>Your Experience</label>
-
-                  <div className="rating-box">
-                    <p>
-                      How would you rate Food Explorer?
-                    </p>
-
-                    <div className="stars">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          type="button"
-                          key={star}
-                          className={
-                            star <= formData.rating
-                              ? "star active"
-                              : "star"
-                          }
-                          onClick={() =>
-                            setFormData({
-                              ...formData,
-                              rating: star,
-                            })
-                          }
-                          aria-label={`Rate ${star} stars`}
-                        >
-                          ★
-                        </button>
-                      ))}
-                    </div>
-
-                    <span className="rating-text">
-                      {formData.rating === 0
-                        ? "Select a rating"
-                        : `${formData.rating}/5 — ${
-                            formData.rating === 5
-                              ? "Excellent!"
-                              : formData.rating === 4
-                              ? "Great!"
-                              : formData.rating === 3
-                              ? "Good"
-                              : formData.rating === 2
-                              ? "Needs improvement"
-                              : "We'll do better"}
-                            `}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Message */}
-                <div className="form-group">
-                  <label htmlFor="message">
-                    Your Message
-                  </label>
-
-                  <div className="textarea-wrapper">
-                    <span>💭</span>
-
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows="5"
-                      placeholder="Tell us what you liked or what we can improve..."
-                      value={formData.message}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
+              {[1, 2, 3, 4, 5].map((star) => (
 
                 <button
-                  type="submit"
-                  className="feedback-submit"
+                  type="button"
+                  key={star}
+                  className={
+                    star <= rating
+                      ? "star selected-star"
+                      : "star"
+                  }
+                  onClick={() => setRating(star)}
                 >
-                  Send Feedback
-                  <span>→</span>
+                  ★
                 </button>
 
-                <p className="privacy-note">
-                  🔒 Your feedback is safely stored in this
-                  browser.
-                </p>
-              </form>
-            </>
-          )}
+              ))}
+
+            </div>
+
+
+            {/* MESSAGE */}
+
+            <label>Your Feedback</label>
+
+            <textarea
+              placeholder="Write your feedback here..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows="5"
+            ></textarea>
+
+
+            <button
+              type="submit"
+              className="submit-feedback"
+            >
+              Send Feedback 🚀
+            </button>
+
+          </form>
+
         </div>
+
+
+        {/* SIDE INFO */}
+
+        <div className="feedback-side">
+
+          <div className="feedback-side-card">
+
+            <div className="big-feedback-emoji">
+              ❤️
+            </div>
+
+            <h2>
+              Your opinion matters!
+            </h2>
+
+            <p>
+              Every piece of feedback helps us improve
+              Food Explorer and create a better experience
+              for everyone.
+            </p>
+
+            <div className="feedback-stats">
+
+              <div>
+                <strong>⭐ 4.9</strong>
+                <span>Average Rating</span>
+              </div>
+
+              <div>
+                <strong>❤️ 100%</strong>
+                <span>Food Lovers</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </section>
+
+
+      {/* FEEDBACK LIST */}
+
+      <section className="feedback-list-section">
+
+        <div className="feedback-list-title">
+
+          <span>WHAT PEOPLE SAY</span>
+
+          <h2>
+            Latest Feedback
+          </h2>
+
+        </div>
+
+
+        {feedbacks.length === 0 ? (
+
+          <div className="no-feedback">
+
+            <div>💭</div>
+
+            <h3>No feedback yet</h3>
+
+            <p>
+              Be the first person to share your experience!
+            </p>
+
+          </div>
+
+        ) : (
+
+          <div className="feedback-grid">
+
+            {feedbacks.map((item) => (
+
+              <article
+                className="feedback-card"
+                key={item.id}
+              >
+
+                <div className="feedback-card-top">
+
+                  <div className="user-avatar">
+                    {item.name.charAt(0).toUpperCase()}
+                  </div>
+
+                  <div>
+                    <h3>{item.name}</h3>
+
+                    <div className="feedback-stars">
+                      {"★".repeat(item.rating)}
+                      <span>
+                        {"★".repeat(5 - item.rating)}
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <p>
+                  "{item.message}"
+                </p>
+
+              </article>
+
+            ))}
+
+          </div>
+
+        )}
+
+      </section>
+
     </main>
   );
 }

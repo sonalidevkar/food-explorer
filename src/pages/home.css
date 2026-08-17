@@ -1,0 +1,826 @@
+/* =========================================
+   FOOD EXPLORER - HOME PAGE ONLY
+========================================= */
+
+.home-page {
+  min-height: calc(100vh - 75px);
+  overflow: hidden;
+  background: #fffaf7;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.home-hero {
+  width: min(1200px, 92%);
+  min-height: 650px;
+
+  margin: auto;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+
+  gap: 50px;
+
+  padding: 55px 0;
+}
+
+
+/* LEFT CONTENT */
+
+.hero-content {
+  animation: homeSlideLeft 0.8s ease;
+}
+
+@keyframes homeSlideLeft {
+
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+
+.hero-badge {
+  display: inline-block;
+
+  padding: 10px 17px;
+
+  border-radius: 30px;
+
+  background: #fff0e7;
+
+  color: #ff5b1a;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  border: 1px solid #ffd5c1;
+}
+
+
+.hero-content h1 {
+  margin: 22px 0 18px;
+
+  font-size: clamp(3rem, 6vw, 5.5rem);
+
+  line-height: 0.98;
+
+  letter-spacing: -4px;
+
+  color: #202020;
+}
+
+
+.hero-content h1 span {
+  display: block;
+
+  color: #ff641f;
+}
+
+
+.hero-content > p {
+  max-width: 570px;
+
+  color: #777;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+
+  margin-bottom: 28px;
+}
+
+
+/* =========================================
+   HERO BUTTONS
+========================================= */
+
+.hero-actions {
+  display: flex;
+
+  gap: 13px;
+
+  flex-wrap: wrap;
+}
+
+
+.hero-primary-btn,
+.hero-secondary-btn {
+
+  text-decoration: none;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 14px 21px;
+
+  border-radius: 13px;
+
+  font-weight: 800;
+
+  transition: 0.3s ease;
+}
+
+
+.hero-primary-btn {
+
+  color: white;
+
+  background: linear-gradient(
+    135deg,
+    #ff5414,
+    #ff8b4d
+  );
+
+  box-shadow:
+    0 12px 30px rgba(255, 84, 20, 0.25);
+}
+
+
+.hero-secondary-btn {
+
+  color: #333;
+
+  background: white;
+
+  border: 1px solid #eaded7;
+}
+
+
+.hero-primary-btn:hover,
+.hero-secondary-btn:hover {
+
+  transform: translateY(-4px);
+}
+
+
+/* =========================================
+   HERO INFO
+========================================= */
+
+.hero-info {
+
+  display: flex;
+
+  gap: 40px;
+
+  margin-top: 40px;
+}
+
+
+.hero-info div {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+
+.hero-info strong {
+
+  font-size: 22px;
+
+  color: #222;
+}
+
+
+.hero-info span {
+
+  font-size: 12px;
+
+  color: #888;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   FOOD VISUAL
+========================================= */
+
+.home-food-area {
+
+  min-height: 530px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  animation: homeZoom 0.9s ease;
+}
+
+
+@keyframes homeZoom {
+
+  from {
+
+    opacity: 0;
+
+    transform: scale(0.8);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform: scale(1);
+
+  }
+
+}
+
+
+.food-background-circle {
+
+  position: absolute;
+
+  width: 420px;
+
+  height: 420px;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffe4d2,
+      #ffd0b4
+    );
+
+  box-shadow:
+    0 30px 80px rgba(255, 100, 31, 0.15);
+}
+
+
+.main-food {
+
+  position: relative;
+
+  z-index: 2;
+
+  width: 350px;
+
+  height: 350px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      white,
+      #fff0e6
+    );
+
+  border: 12px solid white;
+
+  font-size: 160px;
+
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.12);
+
+  animation: foodMove 4s ease-in-out infinite;
+}
+
+
+@keyframes foodMove {
+
+  0%,
+  100% {
+
+    transform: translateY(0);
+
+  }
+
+  50% {
+
+    transform: translateY(-12px);
+
+  }
+
+}
+
+
+/* =========================================
+   FLOATING FOOD
+========================================= */
+
+.floating-food {
+
+  position: absolute;
+
+  z-index: 4;
+
+  width: 68px;
+
+  height: 68px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: white;
+
+  border-radius: 20px;
+
+  font-size: 34px;
+
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.12);
+
+  animation: floatingFood 3.5s ease-in-out infinite;
+}
+
+
+@keyframes floatingFood {
+
+  0%,
+  100% {
+
+    transform: translateY(0) rotate(0);
+
+  }
+
+  50% {
+
+    transform: translateY(-12px) rotate(5deg);
+
+  }
+
+}
+
+
+.food-one {
+
+  top: 55px;
+
+  left: 25px;
+}
+
+
+.food-two {
+
+  top: 90px;
+
+  right: 10px;
+}
+
+
+.food-three {
+
+  bottom: 85px;
+
+  left: 20px;
+}
+
+
+.food-four {
+
+  bottom: 45px;
+
+  right: 35px;
+}
+
+
+/* =========================================
+   RATING
+========================================= */
+
+.home-rating {
+
+  position: absolute;
+
+  z-index: 5;
+
+  bottom: 12px;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 12px 18px;
+
+  background: white;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.12);
+
+  white-space: nowrap;
+}
+
+
+.home-rating strong {
+
+  color: #222;
+
+}
+
+
+.home-rating small {
+
+  color: #888;
+
+  font-size: 10px;
+}
+
+
+/* =========================================
+   HOME OPTIONS
+========================================= */
+
+.home-options {
+
+  width: min(1150px, 92%);
+
+  margin: auto;
+
+  padding: 70px 0;
+}
+
+
+.home-section-heading {
+
+  text-align: center;
+
+  margin-bottom: 35px;
+}
+
+
+.home-section-heading > span {
+
+  color: #ff641f;
+
+  font-size: 12px;
+
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+
+.home-section-heading h2 {
+
+  margin: 10px 0;
+
+  color: #222;
+
+  font-size: clamp(2rem, 4vw, 3rem);
+
+  line-height: 1.1;
+}
+
+
+.home-section-heading p {
+
+  color: #777;
+
+  margin: 0;
+}
+
+
+/* =========================================
+   OPTION CARDS
+========================================= */
+
+.home-option-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 22px;
+}
+
+
+.home-option-card {
+
+  text-decoration: none;
+
+  padding: 30px;
+
+  background: white;
+
+  border: 1px solid #eee1d9;
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 12px 35px rgba(0,0,0,0.06);
+
+  transition: 0.3s ease;
+}
+
+
+.home-option-card:hover {
+
+  transform: translateY(-8px);
+
+  box-shadow:
+    0 25px 50px rgba(0,0,0,0.10);
+
+  border-color: #ffc5aa;
+}
+
+
+.option-icon {
+
+  width: 65px;
+
+  height: 65px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 18px;
+
+  font-size: 31px;
+
+  margin-bottom: 20px;
+}
+
+
+.option-icon.orange {
+
+  background: #fff0e7;
+}
+
+
+.option-icon.red {
+
+  background: #ffe8ea;
+}
+
+
+.option-icon.purple {
+
+  background: #f1eaff;
+}
+
+
+.home-option-card h3 {
+
+  margin: 0 0 10px;
+
+  color: #222;
+
+  font-size: 20px;
+}
+
+
+.home-option-card p {
+
+  color: #777;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+  margin-bottom: 20px;
+}
+
+
+.home-option-card span {
+
+  color: #ff641f;
+
+  font-size: 13px;
+
+  font-weight: 900;
+}
+
+
+/* =========================================
+   BOTTOM CTA
+========================================= */
+
+.home-bottom {
+
+  width: min(1100px, 90%);
+
+  margin: 20px auto 70px;
+
+  padding: 45px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 25px;
+
+  border-radius: 27px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff5414,
+      #ff8a4d
+    );
+
+  box-shadow:
+    0 22px 55px rgba(255,84,20,0.22);
+}
+
+
+.home-bottom span {
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  letter-spacing: 1.5px;
+}
+
+
+.home-bottom h2 {
+
+  margin: 10px 0 5px;
+
+  font-size: 30px;
+}
+
+
+.home-bottom p {
+
+  margin: 0;
+
+  opacity: 0.85;
+}
+
+
+.bottom-explore-btn {
+
+  text-decoration: none;
+
+  background: white;
+
+  color: #ff5414;
+
+  padding: 14px 22px;
+
+  border-radius: 12px;
+
+  font-weight: 900;
+
+  white-space: nowrap;
+
+  transition: 0.3s ease;
+}
+
+
+.bottom-explore-btn:hover {
+
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 12px 25px rgba(0,0,0,0.15);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .home-hero {
+
+    grid-template-columns: 1fr;
+
+    text-align: center;
+  }
+
+  .hero-content > p {
+
+    margin-left: auto;
+
+    margin-right: auto;
+  }
+
+  .hero-actions,
+  .hero-info {
+
+    justify-content: center;
+  }
+
+  .home-option-grid {
+
+    grid-template-columns: 1fr;
+  }
+
+  .home-bottom {
+
+    flex-direction: column;
+
+    text-align: center;
+  }
+
+}
+
+
+@media (max-width: 550px) {
+
+  .home-hero {
+
+    padding-top: 35px;
+  }
+
+  .hero-content h1 {
+
+    font-size: 45px;
+
+    letter-spacing: -2px;
+  }
+
+  .food-background-circle {
+
+    width: 300px;
+
+    height: 300px;
+  }
+
+  .main-food {
+
+    width: 260px;
+
+    height: 260px;
+
+    font-size: 120px;
+  }
+
+  .floating-food {
+
+    width: 52px;
+
+    height: 52px;
+
+    font-size: 25px;
+  }
+
+  .hero-info {
+
+    gap: 20px;
+  }
+
+  .home-bottom {
+
+    padding: 32px 22px;
+  }
+
+  .home-bottom h2 {
+
+    font-size: 24px;
+  }
+
+  .bottom-explore-btn {
+
+    width: 100%;
+
+    text-align: center;
+  }
+
+}
